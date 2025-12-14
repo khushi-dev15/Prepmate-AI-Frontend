@@ -1,0 +1,98 @@
+.clean-chat-section {
+  height: 100vh; /* full viewport height */
+  width: 100vw;
+  background: radial-gradient(circle at top, #0a0a0f, #000); /* same as About/Features */
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+/* Fixed heading at top */
+.chat-heading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  padding: 5rem 1rem;
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf); /* theme gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 100;
+  animation: shine 4s linear infinite;
+}
+
+/* Scrollable chat container under heading */
+.chat-container {
+  margin-top: 8rem; /* height of heading */
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Chat bubbles */
+.chat-bubble {
+  margin: 0 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  max-width: 80%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.5s forwards;
+  font-size: 1rem;
+}
+
+/* AI bubble - theme colors */
+.chat-bubble.ai {
+  background: rgba(255, 0, 128, 0.2); /* soft pinkish */
+  align-self: flex-start;
+  border: 1px solid #ff0080;
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+/* User bubble - theme colors */
+.chat-bubble.user {
+  background: rgba(42, 250, 223, 0.2); /* soft cyan */
+  align-self: flex-end;
+  border: 1px solid #2afadf;
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+/* Animations */
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Scrollbar hidden */
+.chat-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .chat-container {
+    max-width: 100%;
+    padding: 0.5rem;
+    margin-top: 5.5rem;
+  }
+  .chat-bubble {
+    max-width: 90%;
+    font-size: 0.95rem;
+  }
+}

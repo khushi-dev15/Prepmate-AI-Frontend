@@ -1,0 +1,74 @@
+.interview-container {
+  max-width: 960px;
+  margin: 1.5rem auto;
+  padding: 1.6rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  color: #e7f9ff;
+}
+
+.interview-container h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  color: #fff;
+}
+
+.question-box {
+  background: rgba(255,255,255,0.02);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.question-box h3 {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.05rem;
+  color: #dffaff;
+}
+
+.question-box textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+  resize: vertical;
+  font-size: 15px;
+  background: rgba(0,0,0,0.45);
+  color: #e6f7ff;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.button-group button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.button-group button:first-child {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+
+.button-group button:last-child {
+  background: linear-gradient(90deg,#ff0080,#2afadf);
+  color: #041025;
+}
+
+/* small-screen adjustments */
+@media (max-width: 720px) {
+  .interview-container { padding: 1rem; margin: 1rem; }
+  .question-box textarea { min-height: 110px; font-size: 14px; }
+  .button-group { flex-direction: column-reverse; align-items: stretch; }
+  .button-group button { width: 100%; }
+}
