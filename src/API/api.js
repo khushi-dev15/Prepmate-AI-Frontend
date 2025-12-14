@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: "https://prepmate-ai-backend-829s.onrender.com/api",
   withCredentials: true
 });
 
