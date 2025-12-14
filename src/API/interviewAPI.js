@@ -1,39 +1,39 @@
 // frontend/src/API/interviewAPI.js
-import axios from "axios";
-const API_URL = "http://localhost:5000/api/interview";
+import api from "./api";
 
-export const fetchInterviewQuestions = async (jobTitle, token, round) => {
-  const res = await axios.post(`${API_URL}/questions`, { jobTitle, round }, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.data; // { questions, category, round }
-};
-
-export const evaluateAnswers = async (answers, jobTitle, round, token) => {
-  const res = await axios.post(`${API_URL}/evaluate`, { answers, jobTitle, round }, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.data; // { evaluation: [...] }
-};
-
-export const submitFinalResult = async (payload, token) => {
-  const res = await axios.post(`${API_URL}/submit`, payload, {
-    headers: { Authorization: `Bearer ${token}` }
+// Fetch interview questions
+export const fetchInterviewQuestions = async (jobTitle, round) => {
+  const res = await api.post("/interview/questions", {
+    jobTitle,
+    round
   });
   return res.data;
 };
 
-export const fetchUserResults = async (token) => {
-  const res = await axios.get(`${API_URL}/results`, {
-    headers: { Authorization: `Bearer ${token}` }
+// Evaluate answers
+export const evaluateAnswers = async (answers, jobTitle, round) => {
+  const res = await api.post("/interview/evaluate", {
+    answers,
+    jobTitle,
+    round
   });
-  return res.data; // { results: [...] }
+  return res.data;
 };
 
-// profile
-export const fetchUserProfile = async (token) => {
-  const res = await axios.get(`http://localhost:5000/api/users/profile`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.data; // { user }
+// Submit final result
+export const submitFinalResult = async (payload) => {
+  const res = await api.post("/interview/submit", payload);
+  return res.data;
+};
+
+// Fetch user interview results
+export const fetchUserResults = async () => {
+  const res = await api.get("/interview/results");
+  return res.data;
+};
+
+// User profile
+export const fetchUserProfile = async () => {
+  const res = await api.get("/users/profile");
+  return res.data;
 };
