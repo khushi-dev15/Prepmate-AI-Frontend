@@ -16,6 +16,7 @@ export default function InterviewPage() {
 
   // Read saved values
   const jobTitleStored = localStorage.getItem("jobTitle");
+  const jobDescriptionStored = localStorage.getItem("jobDescription") || "";
   const jobCategory = localStorage.getItem("jobCategory") || "Non-Technical";
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -40,7 +41,7 @@ export default function InterviewPage() {
       setLoading(true);
       // send both keys to be safe: backend accepts jobTitle or jobtitle
       const payloadJobTitle = jobTitleStored;
-      const data = await fetchInterviewQuestions(payloadJobTitle, token, r);
+      const data = await fetchInterviewQuestions(payloadJobTitle, jobDescriptionStored, r, token);
       setQuestions(data.questions || []);
       setCurrentIndex(0);
       setAnswers([]); // fresh answers each round

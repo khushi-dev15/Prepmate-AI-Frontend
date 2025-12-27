@@ -1,7 +1,9 @@
 .final-result-container {
-  padding: 32px;
-  max-width: 980px;
-  margin: 48px auto;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #e6f7ff;
 }
 
@@ -9,9 +11,12 @@
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.06);
   backdrop-filter: blur(8px);
-  padding: 24px;
+  padding: 2rem;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
 }
 
 .final-result-card h2 {
