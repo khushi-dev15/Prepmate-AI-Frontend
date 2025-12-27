@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./landing.css";
 
 const LandingPage = () => {
-  useEffect(() => {
-    // add class to body so we can hide navbar specifically for landing on small screens
-    document.body.classList.add("landing-hide-nav");
-    return () => document.body.classList.remove("landing-hide-nav");
-  }, []);
   return (
     <section className="hero-section">
       <h1 className="hero-title">Your AI Interview Partner</h1>

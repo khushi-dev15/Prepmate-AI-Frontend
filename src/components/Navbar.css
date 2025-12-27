@@ -244,9 +244,4 @@
   }
 }
 
-/* Hide navbar on landing page for mobile/tablet when body has class */
-@media (max-width: 768px) {
-  body.landing-hide-nav .navbar {
-    display: none;
-  }
-}
+/* (removed mobile-hide rule so landing view matches desktop on mobile) */
