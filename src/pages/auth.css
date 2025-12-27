@@ -22,7 +22,8 @@ html, body {
     overflow: hidden;
     animation: fadeInBackground 1s ease forwards;
     margin-top: 0;
-    padding-top: 70px;
+    padding: 1rem;
+    padding-top: calc(70px + 1rem);
 }
 
 /* Card styling */
@@ -30,18 +31,19 @@ html, body {
     position: relative;
     z-index: 2;
     background: rgba(255, 255, 255, 0.05);
-    padding: 35px 25px;
+    padding: 2rem 1.5rem;
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-    width: 350px;
+    width: 100%;
+    max-width: 380px;
     text-align: center;
     animation: fadeInCard 1s ease forwards;
 }
 
 .auth-title {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
     background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -51,36 +53,36 @@ html, body {
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1rem;
 }
 
 .auth-form input {
-    padding: 12px 15px;
+    padding: 12px 14px;
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
     background: rgba(255,255,255,0.05);
     color: #fff;
     font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    transition: all 0.3s ease;
 }
 
 .auth-form input:focus {
     border-color: #ff0080;
-    box-shadow: 0 0 10px rgba(255,0,128,0.5);
+    box-shadow: 0 0 12px rgba(255,0,128,0.4);
     outline: none;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
 }
 
 .auth-form button {
-    padding: 12px;
+    padding: 12px 14px;
     border-radius: 12px;
     border: none;
     background: linear-gradient(135deg, #ff0080, #2afadf);
     color: #0a0a0f;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
 }
 
 .auth-form button:hover {
@@ -89,8 +91,8 @@ html, body {
 }
 
 .toggle-text {
-    margin-top: 15px;
-    font-size: 14px;
+    margin-top: 1.2rem;
+    font-size: clamp(13px, 2vw, 14px);
     color: #ccc;
 }
 
@@ -98,12 +100,13 @@ html, body {
     color: #ff0080;
     cursor: pointer;
     font-weight: 600;
-    text-decoration: underline;
-    transition: color 0.3s;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .toggle-link:hover {
     color: #2afadf;
+    text-decoration: underline;
 }
 
 /* Animations */
@@ -123,15 +126,81 @@ html, body {
 }
 
 /* Responsive */
-@media (max-width: 500px) {
+@media (max-width: 768px) {
+    .auth-container {
+        padding: 1rem;
+        padding-top: calc(70px + 1rem);
+    }
+
     .auth-card {
-        padding: 25px 20px;
-        width: 90%;
+        padding: 1.8rem 1.3rem;
+        max-width: 90%;
+        border-radius: 14px;
     }
+
     .auth-title {
-        font-size: 2rem;
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        margin-bottom: 1.3rem;
     }
+
+    .auth-form {
+        gap: 0.9rem;
+    }
+
     .auth-form input {
-        font-size: 0.95rem;
+        padding: 11px 12px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    .auth-form button {
+        padding: 11px 12px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    .toggle-text {
+        margin-top: 1rem;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 0.75rem;
+        padding-top: calc(70px + 0.75rem);
+    }
+
+    .auth-card {
+        padding: 1.5rem 1.2rem;
+        width: 100%;
+        border-radius: 12px;
+        max-width: none;
+    }
+
+    .auth-title {
+        font-size: clamp(1.3rem, 5vw, 1.8rem);
+        margin-bottom: 1rem;
+    }
+
+    .auth-form {
+        gap: 0.8rem;
+    }
+
+    .auth-form input {
+        padding: 10px 12px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    .auth-form button {
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    .toggle-text {
+        margin-top: 0.8rem;
+        font-size: 12px;
     }
 }
