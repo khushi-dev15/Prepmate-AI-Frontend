@@ -24,6 +24,8 @@ html,body {
   align-items: center;
   text-align: center;
   overflow: hidden;
+  margin-top: 0;
+  padding-top: 70px;
 }
 
 

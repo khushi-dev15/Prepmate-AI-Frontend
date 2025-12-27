@@ -1,12 +1,14 @@
 .homepage-container {
-  min-height: calc(100vh - 70px); /* navbar ke liye */
-  width: 100vw;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+  max-width: 100%;
   background: radial-gradient(circle at top, #0a0a0f, #12121a, #1c1c29);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
+  margin-top: 70px;
 }
 
 .form-container {
