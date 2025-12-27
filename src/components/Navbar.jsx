@@ -7,38 +7,51 @@ export default function Navbar() {
   const token = localStorage.getItem("token");
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setMenuOpen(false);
+    closeMenu();
     navigate("/auth");
   };
 
-  const handleNavClick = (path) => {
-    navigate(path);
-    setMenuOpen(false);
+  const handleLogoClick = () => {
+    closeMenu();
+    navigate("/");
   };
 
   return (
     <nav className="navbar">
-      <div className="logo" onClick={() => { handleNavClick("/"); }}>
+      <div className="logo" onClick={handleLogoClick}>
         PrepMate AI
       </div>
       
-      <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+      <button 
+        className={`hamburger ${menuOpen ? "active" : ""}`} 
+        onClick={toggleMenu}
+        aria-label="Toggle menu"
+        aria-expanded={menuOpen}
+      >
         <span></span>
         <span></span>
         <span></span>
       </button>
       
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-        <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-        <li><Link to="/features" onClick={() => setMenuOpen(false)}>Features</Link></li>
-        <li><Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>
-        <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+        <li><Link to="/" onClick={closeMenu}>Home</Link></li>
+        <li><Link to="/features" onClick={closeMenu}>Features</Link></li>
+        <li><Link to="/dashboard" onClick={closeMenu}>Dashboard</Link></li>
+        <li><Link to="/contact" onClick={closeMenu}>Contact</Link></li>
         {token ? (
           <li><button className="auth-btn" onClick={handleLogout}>Logout</button></li>
         ) : (
-          <li><Link className="auth-btn" to="/auth" onClick={() => setMenuOpen(false)}>Login/Register</Link></li>
+          <li><Link className="auth-btn" to="/auth" onClick={closeMenu}>Login/Register</Link></li>
         )}
       </ul>
     </nav>
