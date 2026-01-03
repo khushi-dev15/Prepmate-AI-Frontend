@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css"
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // keep navbar in sync with localStorage changes (login/logout from other tabs)
+    const onStorage = (e) => {
+      if (e.key === "token") setToken(localStorage.getItem("token"));
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -17,6 +26,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setToken(null);
     closeMenu();
     navigate("/auth");
   };

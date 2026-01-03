@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../API/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./auth.css";
 
 export default function AuthPage() {
@@ -9,7 +9,23 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const success = params.get("success");
+
+    if (token && success === "true") {
+      localStorage.setItem("token", token);
+      alert("Google login successful!");
+      navigate("/home");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,6 +62,33 @@ export default function AuthPage() {
     } catch (err) {
       console.error("ERR →", err);
       alert(err.response?.data?.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      // Redirect to backend Google OAuth endpoint
+      const redirectUrl = `${window.location.origin}/auth?google=true`;
+      window.location.href = `/api/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
+    } catch (err) {
+      console.error(err);
+      alert("Google login not available at the moment");
+    }
+  };
+
+  const handleForgotSubmit = async (e) => {
+    e && e.preventDefault();
+    if (!forgotEmail) return alert("Please enter your email");
+    try {
+      setLoading(true);
+      const res = await axios.post("/users/forgot-password", { email: forgotEmail });
+      alert(res.data.message || "If the email exists, a reset link was sent.");
+      setShowForgot(false);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Unable to send reset email (backend may not support this yet).");
     } finally {
       setLoading(false);
     }
@@ -88,6 +131,30 @@ export default function AuthPage() {
             {loading ? "Please wait..." : isLogin ? "Login" : "Register"}
           </button>
         </form>
+
+        <div style={{ marginTop: 12, display: 'flex', gap: 8, justifyContent: 'center' }}>
+          <button className="google-btn" onClick={handleGoogleLogin} style={{ padding: '8px 12px' }}>
+            Continue with Google
+          </button>
+          <button className="link-btn" onClick={() => setShowForgot(true)} style={{ padding: '8px 12px' }}>
+            Forgot Password?
+          </button>
+        </div>
+
+        {showForgot && (
+          <div className="forgot-modal">
+            <div className="forgot-card">
+              <h3>Reset Password</h3>
+              <form onSubmit={handleForgotSubmit}>
+                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} required />
+                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                  <button type="submit" disabled={loading}>Send Reset</button>
+                  <button type="button" onClick={() => setShowForgot(false)}>Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <p className="toggle-text">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
