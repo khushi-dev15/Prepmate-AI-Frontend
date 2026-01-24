@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../API/api";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./auth.css";
 
 export default function AuthPage() {
@@ -12,7 +12,6 @@ export default function AuthPage() {
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   // Handle Google OAuth callback
   useEffect(() => {
@@ -70,8 +69,7 @@ export default function AuthPage() {
   const handleGoogleLogin = async () => {
     try {
       // Redirect to backend Google OAuth endpoint
-      const redirectUrl = `${window.location.origin}/auth?google=true`;
-      window.location.href = `/api/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
+      window.location.href = "/api/auth/google";
     } catch (err) {
       console.error(err);
       alert("Google login not available at the moment");

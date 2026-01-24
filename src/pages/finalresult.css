@@ -46,6 +46,44 @@
 }
 
 @media (max-width: 720px) {
-  .final-result-container { padding: 18px; margin: 20px 12px; }
-  .final-result-card { padding: 16px; }
+  .final-result-container { 
+    padding: 18px; 
+    margin: 20px 12px;
+    margin-top: 80px;
+  }
+  .final-result-card { 
+    padding: 16px; 
+    max-width: 100%;
+  }
+  .final-result-card h2 {
+    font-size: 1.4rem;
+  }
+  .round-block ul {
+    padding-left: 1rem;
+  }
+  .final-actions button {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .final-result-container {
+    padding: 10px;
+    margin: 10px;
+    margin-top: 70px;
+  }
+  .final-result-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+  .final-result-card h2 {
+    font-size: 1.2rem;
+  }
+  .round-block h3 {
+    font-size: 1rem;
+  }
+  .overall-score {
+    font-size: 1rem;
+  }
 }

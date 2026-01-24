@@ -21,7 +21,7 @@ const ContactPage = () => {
     // Open mail client. If popup blocked, show a fallback alert.
     try {
       window.location.href = mailto;
-    } catch (err) {
+    } catch {
       alert('Please send your message to khushishrivas82@gmail.com');
     }
 

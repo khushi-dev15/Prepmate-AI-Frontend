@@ -21,8 +21,8 @@ export default function DashboardPage() {
         console.error(err);
       }
     };
-    load();
-  }, []);
+    if (token) load();
+  }, [token]);
   return (
     <div className="dashboard-container">
       <h2 style={{ marginBottom: 12 }}>Your Dashboard</h2>

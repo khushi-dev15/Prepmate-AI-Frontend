@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// Use localhost in development, Render in production
+// Use localhost in development, production API in production
 const isDev = import.meta.env.DEV;
-const baseURL = isDev ? "http://localhost:5000/api" : "https://prepmate-ai-backend-829s.onrender.com/api";
+const baseURL = isDev ? "http://localhost:5000/api" : (import.meta.env.VITE_API_URL || "/api");
 
 const axiosInstance = axios.create({
   baseURL,

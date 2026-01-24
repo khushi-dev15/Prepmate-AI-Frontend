@@ -20,7 +20,6 @@ export default function FinalResultPage() {
   const sum = arr => arr.reduce((s, a) => s + (a.score || 0), 0);
   const trTotal = sum(trEvaluation);
   const hrTotal = sum(hrEvaluation);
-  const maxPerRound = Math.max( (trEvaluation.length || 0) * 10, (hrEvaluation.length || 0) * 10 );
   const overall = trTotal + hrTotal;
 
   return (

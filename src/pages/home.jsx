@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import axios from "../API/api"; // make sure this path is correct
 import { useNavigate } from "react-router-dom";
 import "./home.css";
 
 export default function HomePages() {
   const [jobTitle, setJobTitle] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [backendMessage, setBackendMessage] = useState(null);
   const [error, setError] = useState(null);
-  const [resumeId, setResumeId] = useState(null);
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -47,7 +45,6 @@ export default function HomePages() {
     const formData = new FormData();
     formData.append("resume", resume);
     formData.append("jobTitle", normalizedJobTitle);
-    if (jobDescription && jobDescription.trim()) formData.append("jobDescription", jobDescription.trim());
 
     try {
       setLoading(true);
@@ -57,9 +54,7 @@ export default function HomePages() {
       });
 
       if (res.data.success) {
-        setResumeId(res.data.resumeId);
         localStorage.setItem("jobTitle", normalizedJobTitle);
-        if (jobDescription && jobDescription.trim()) localStorage.setItem("jobDescription", jobDescription.trim());
         localStorage.setItem("resumeId", res.data.resumeId);
         localStorage.setItem("resumeUploaded", "true");
         // Automatically proceed to processing and show result (skip Next/modal)
@@ -94,8 +89,6 @@ export default function HomePages() {
     const formData = new FormData();
     if (resume) formData.append("resume", resume);
     formData.append("jobTitle", jobTitleStored);
-    const jobDescStored = localStorage.getItem("jobDescription") || jobDescription || "";
-    if (jobDescStored) formData.append("jobDescription", jobDescStored);
     if (storedResumeId) {
       formData.append("resumeId", storedResumeId);
     }
@@ -113,7 +106,7 @@ export default function HomePages() {
         if (fileInputRef && fileInputRef.current) {
           fileInputRef.current.blur();
         }
-      } catch (blurErr) {
+      } catch {
         // ignore
       }
       const res = await axios.post("/resume/process", formData, {
