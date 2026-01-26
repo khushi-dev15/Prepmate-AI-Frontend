@@ -24,6 +24,20 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuOpen && !event.target.closest('.navbar')) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);
@@ -64,6 +78,8 @@ export default function Navbar() {
           <li><Link className="auth-btn" to="/auth" onClick={closeMenu}>Login/Register</Link></li>
         )}
       </ul>
+      {/* Mobile menu backdrop */}
+      {menuOpen && <div className="menu-backdrop" onClick={closeMenu}></div>}
     </nav>
   );
 }

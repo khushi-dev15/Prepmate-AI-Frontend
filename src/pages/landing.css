@@ -24,8 +24,6 @@ html,body {
   align-items: center;
   text-align: center;
   overflow: hidden;
-  margin-top: 0;
-  padding-top: 70px;
   padding-bottom: 40px;
 }
 
@@ -140,7 +138,6 @@ html,body {
 /* Tablet (768px and below) */
 @media (max-width: 768px) {
   .hero-section {
-    padding-top: 80px;
     min-height: 90vh;
   }
 
@@ -183,7 +180,6 @@ html,body {
 /* Mobile (480px and below) */
 @media (max-width: 480px) {
   .hero-section {
-    padding-top: 70px; /* keep navbar padding */
     min-height: auto;
     padding-bottom: 20px;
     margin-bottom: 0;

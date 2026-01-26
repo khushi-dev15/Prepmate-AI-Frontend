@@ -25,18 +25,30 @@ a:hover {
 body {
   margin: 0;
   padding: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   background-color: #0a0a0f;
+  /* Add padding-top for fixed navbar */
+  padding-top: 70px;
+}
+
+/* Responsive padding for navbar */
+@media (max-width: 768px) {
+  body {
+    padding-top: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 56px;
+  }
 }
 
 #root {
   width: 100%;
   margin: 0;
   padding: 0;
-}
 }
 
 h1 {

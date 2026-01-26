@@ -3,7 +3,6 @@
   margin: 2rem auto;
   padding: 1.5rem;
   color: #e8f9ff;
-  margin-top: 70px;
 }
 
 .dashboard-grid {
@@ -125,7 +124,6 @@ html, body{
   flex-direction: column;
   align-items: center;
   padding: 2rem 1rem;
-  padding-top: calc(70px + 2rem);
   text-align: center;
 }
 
@@ -224,13 +222,7 @@ html, body{
   transform: scale(1.08);
   padding: 0.8rem 1.8rem;
   font-size: clamp(0.95rem, 2vw, 1.1rem);
-
-/* Animations */
-  display: inline-block;
-  transition: all 0.3s ease;
-@keyframes shine {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.6);
 }
 
 /* Responsive */

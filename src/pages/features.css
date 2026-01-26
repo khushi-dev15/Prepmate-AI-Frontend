@@ -5,8 +5,6 @@
   display: flex;
   flex-direction: column;
   color: #fff;
-  padding-top: 70px;
-  margin-top: 0;
 }
 
 /* Fixed heading at top */
@@ -15,8 +13,7 @@
   top: auto;
   left: auto;
   width: 100%;
-  padding: 3rem 1rem;
-  padding-top: calc(70px + 2rem);
+  padding: 2rem 1rem;
   text-align: center;
   font-size: clamp(1.8rem, 5vw, 2.5rem);
   font-weight: 700;
@@ -90,8 +87,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .chat-heading {
-    padding: 2rem 1rem;
-    padding-top: calc(70px + 1.5rem);
+    padding: 1.5rem 1rem;
     font-size: clamp(1.5rem, 4vw, 2rem);
   }
 
@@ -119,7 +115,6 @@
 
   .chat-heading {
     padding: 1.5rem 0.75rem;
-    padding-top: calc(70px + 1rem);
     font-size: clamp(1.3rem, 5vw, 1.8rem);
   }
 

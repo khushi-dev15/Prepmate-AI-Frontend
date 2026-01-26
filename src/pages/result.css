@@ -93,7 +93,6 @@
 @media (max-width: 480px) {
   .result-container {
     padding: 0.5rem;
-    padding-top: 70px;
   }
 
   .result-card {
