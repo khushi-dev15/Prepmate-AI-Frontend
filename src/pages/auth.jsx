@@ -71,7 +71,7 @@ export default function AuthPage() {
         login(response.data.user, response.data.token);
         navigate("/homepage");
       } else {
-        navigate("/homepage");
+        alert("Login failed: Invalid response from server");
       }
     } catch (err) {
       console.error("ERR →", err);

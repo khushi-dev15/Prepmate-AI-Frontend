@@ -18,24 +18,22 @@ export const AuthProvider = ({ children }) => {
   // Check for existing token on app load
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          // Verify token with backend
-          const response = await api.get('/auth/verify');
-          if (response.data.success) {
-            setUser(response.data.user);
-          } else {
-            // Token invalid, remove it
-            localStorage.removeItem('token');
-          }
-        } catch (error) {
-          console.error('Token verification failed:', error);
-          // Token invalid, remove it
-          localStorage.removeItem('token');
+      try {
+        // Always try to verify token via API (cookie will be sent automatically)
+        const response = await api.get('/auth/verify');
+        if (response.data.success) {
+          setUser(response.data.user);
+        } else {
+          // Token invalid or not present
+          setUser(null);
         }
+      } catch (error) {
+        console.error('Token verification failed:', error);
+        // Token invalid or not present
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     checkAuth();
@@ -43,12 +41,18 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData, token) => {
     setUser(userData);
-    localStorage.setItem('token', token);
+    // Token is stored in httpOnly cookie by backend, no need to store in localStorage
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('token');
+  const logout = async () => {
+    try {
+      // Call logout endpoint to clear cookie
+      await api.post('/users/logout');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setUser(null);
+    }
   };
 
   const value = {
