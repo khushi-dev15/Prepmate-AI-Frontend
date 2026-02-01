@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Navbar.css";
+import { useAuth } from "../contexts/AuthContext";
+import "./Navbar.css"
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const menuRef = useRef(null);
@@ -19,15 +20,6 @@ export default function Navbar() {
     checkIsMobile();
     window.addEventListener("resize", checkIsMobile);
     return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
-
-  useEffect(() => {
-    // Keep navbar in sync with localStorage changes (login/logout from other tabs)
-    const onStorage = (e) => {
-      if (e.key === "token") setToken(localStorage.getItem("token"));
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   const toggleMenu = () => {
@@ -80,8 +72,7 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+    logout();
     closeMenu();
     navigate("/auth");
   };
@@ -164,7 +155,7 @@ export default function Navbar() {
             Contact
           </Link>
         </li>
-        {token ? (
+        {user ? (
           <li role="none">
             <button
               className="auth-btn"

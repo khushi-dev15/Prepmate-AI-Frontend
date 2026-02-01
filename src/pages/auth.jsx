@@ -69,9 +69,10 @@ export default function AuthPage() {
       // SAVE TOKEN AND USER DATA
       if (response.data.token && response.data.user) {
         login(response.data.user, response.data.token);
+        navigate("/homepage");
+      } else {
+        navigate("/homepage");
       }
-
-      navigate("/home");
     } catch (err) {
       console.error("ERR →", err);
       alert(err.response?.data?.message || "Something went wrong!");
