@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../API/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "./auth.css";
 
 export default function AuthPage() {
@@ -12,6 +13,7 @@ export default function AuthPage() {
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // Handle Google OAuth callback
   useEffect(() => {
@@ -20,11 +22,23 @@ export default function AuthPage() {
     const success = params.get("success");
 
     if (token && success === "true") {
-      localStorage.setItem("token", token);
-      alert("Google login successful!");
-      navigate("/home");
+      // For Google OAuth, we need to verify the token to get user data
+      const verifyAndLogin = async () => {
+        try {
+          const response = await axios.get('/auth/verify');
+          if (response.data.success) {
+            login(response.data.user, token);
+            alert("Login successful!");
+            navigate("/home");
+          }
+        } catch (error) {
+          console.error('Failed to verify token:', error);
+          alert("Login failed. Please try again.");
+        }
+      };
+      verifyAndLogin();
     }
-  }, [navigate]);
+  }, [navigate, login]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,9 +66,9 @@ export default function AuthPage() {
       // READ DATA
       console.log("RESPONSE →", response.data);
 
-      // SAVE TOKEN IF EXISTS
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      // SAVE TOKEN AND USER DATA
+      if (response.data.token && response.data.user) {
+        login(response.data.user, response.data.token);
       }
 
       navigate("/home");
@@ -63,16 +77,6 @@ export default function AuthPage() {
       alert(err.response?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      // Redirect to backend Google OAuth endpoint
-      window.location.href = "/api/auth/google";
-    } catch (err) {
-      console.error(err);
-      alert("Google login not available at the moment");
     }
   };
 
@@ -131,9 +135,6 @@ export default function AuthPage() {
         </form>
 
         <div style={{ marginTop: 12, display: 'flex', gap: 8, justifyContent: 'center' }}>
-          <button className="google-btn" onClick={handleGoogleLogin} style={{ padding: '8px 12px' }}>
-            Continue with Google
-          </button>
           <button className="link-btn" onClick={() => setShowForgot(true)} style={{ padding: '8px 12px' }}>
             Forgot Password?
           </button>
