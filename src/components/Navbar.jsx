@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Navbar.css"
+import "./Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -17,12 +17,12 @@ export default function Navbar() {
     };
 
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
   useEffect(() => {
-    // keep navbar in sync with localStorage changes (login/logout from other tabs)
+    // Keep navbar in sync with localStorage changes (login/logout from other tabs)
     const onStorage = (e) => {
       if (e.key === "token") setToken(localStorage.getItem("token"));
     };
@@ -41,34 +41,39 @@ export default function Navbar() {
   // Close menu when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target) &&
-          hamburgerRef.current && !hamburgerRef.current.contains(event.target)) {
+      if (
+        menuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        hamburgerRef.current &&
+        !hamburgerRef.current.contains(event.target)
+      ) {
         setMenuOpen(false);
       }
     };
 
     const handleEscape = (event) => {
-      if (event.key === 'Escape' && menuOpen) {
+      if (event.key === "Escape" && menuOpen) {
         setMenuOpen(false);
       }
     };
 
     if (menuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden'; // Prevent background scroll
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden"; // Prevent background scroll
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [menuOpen]);
 
   // Handle keyboard navigation
   const handleKeyDown = (event, action) => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       action();
     }
@@ -84,7 +89,6 @@ export default function Navbar() {
   const handleLogoClick = () => {
     closeMenu();
     navigate("/");
-  };
   };
 
   return (
@@ -188,7 +192,6 @@ export default function Navbar() {
         )}
       </ul>
 
-      {/* Mobile menu backdrop with improved accessibility */}
       {menuOpen && (
         <div
           className="menu-backdrop"
