@@ -1,20 +1,17 @@
 import axios from "axios";
 
-// Use localhost in development, production API in production
+// Use localhost in dev, Render URL in prod
 const isDev = import.meta.env.DEV;
 const baseURL = isDev ? "http://localhost:5000/api" : (import.meta.env.VITE_API_URL || "/api");
 
 const axiosInstance = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: true, // ✅ cookies sent automatically
   timeout: 120000
 });
 
-console.log("🌐 API Base URL (forced):", baseURL);
-
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  // ✅ Remove localStorage token for cookie auth
   console.log("📤 Request:", config.method?.toUpperCase(), config.baseURL + config.url);
   return config;
 });
