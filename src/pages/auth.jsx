@@ -66,12 +66,18 @@ export default function AuthPage() {
       // READ DATA
       console.log("RESPONSE →", response.data);
 
-      // SAVE TOKEN AND USER DATA
-      if (response.data.user) {
-        login(response.data.user, response.data.token);
-        navigate("/homepage");
-      } else {
-        alert("Login failed: Invalid response from server");
+      // VERIFY USER AFTER LOGIN/REGISTER
+      try {
+        const verifyRes = await axios.get('/auth/verify');
+        if (verifyRes.data.success) {
+          login(verifyRes.data.user);
+          navigate("/homepage");
+        } else {
+          alert("Login failed: Could not verify user");
+        }
+      } catch (err) {
+        console.error("Verification error:", err);
+        alert("Login failed: " + (err.response?.data?.message || "Verification failed"));
       }
     } catch (err) {
       console.error("ERR →", err);
