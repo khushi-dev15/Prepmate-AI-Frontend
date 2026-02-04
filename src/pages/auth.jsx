@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../API/api";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/useAuth";
 import "./auth.css";
 
 export default function AuthPage() {
@@ -27,7 +27,7 @@ export default function AuthPage() {
         try {
           const response = await axios.get('/auth/verify');
           if (response.data.success) {
-            login(response.data.user, token);
+            login(response.data.user);
             alert("Login successful!");
             navigate("/home");
           }
@@ -66,10 +66,19 @@ export default function AuthPage() {
       // READ DATA
       console.log("RESPONSE →", response.data);
 
-      // VERIFY USER AFTER LOGIN/REGISTER
+      // If backend returned user data directly, use it (works when cookie-based auth is used)
+      if (response.data && typeof response.data === 'object' && (response.data.user || response.data._id || response.data.username)) {
+        const userData = response.data.user || response.data;
+        login(userData);
+        navigate("/homepage");
+        setLoading(false);
+        return;
+      }
+
+      // Fallback: try verifying via cookie-based endpoint
       try {
         const verifyRes = await axios.get('/auth/verify');
-        if (verifyRes.data.success) {
+        if (verifyRes.data && verifyRes.data.success) {
           login(verifyRes.data.user);
           navigate("/homepage");
         } else {

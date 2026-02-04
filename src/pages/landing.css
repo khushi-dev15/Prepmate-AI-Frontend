@@ -44,6 +44,7 @@ html,body {
   text-transform: uppercase;
   background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf);
   background-size: 200% auto;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 4s linear infinite;
