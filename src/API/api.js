@@ -2,12 +2,11 @@ import axios from "axios";
 
 // Use localhost in dev, Render URL in prod
 const isDev = import.meta.env.DEV;
-// In development use localhost backend. In production prefer VITE_API_URL,
-// but fall back to the known Render backend URL so cookies and CORS work
-// when the environment variable is missing on the host.
+
+// In development use localhost backend. In production use Render backend URL
 const baseURL = isDev
-  ? "http://localhost:5000/api"
-  : (import.meta.env.VITE_API_URL || "https://prepmate-ai-backend.onrender.com/api");
+  ? "http://localhost:5000/api" // local dev
+  : (import.meta.env.VITE_API_URL || "https://prepmate-ai-backend-829s.onrender.com/api"); // Render backend
 
 const axiosInstance = axios.create({
   baseURL,
