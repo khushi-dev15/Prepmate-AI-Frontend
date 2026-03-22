@@ -6,14 +6,13 @@ import "./dashboard.css";
 export default function DashboardPage() {
   const [results, setResults] = useState([]);
   const [profile, setProfile] = useState(null);
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const load = async () => {
       try {
         const [res, profileRes] = await Promise.all([
-          fetchUserResults(token),
-          fetchUserProfile(token)
+          fetchUserResults(),
+          fetchUserProfile()
         ]);
         setResults(res.results || []);
         setProfile(profileRes.user || null);
@@ -21,8 +20,8 @@ export default function DashboardPage() {
         console.error(err);
       }
     };
-    if (token) load();
-  }, [token]);
+    load();
+  }, []);
   return (
     <div className="dashboard-container">
       <h2 style={{ marginBottom: 12 }}>Your Dashboard</h2>

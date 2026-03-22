@@ -18,8 +18,6 @@ export default function InterviewPage() {
   const jobTitleStored = localStorage.getItem("jobTitle");
   const jobDescriptionStored = localStorage.getItem("jobDescription") || "";
   const jobCategory = localStorage.getItem("jobCategory") || "Non-Technical";
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
   const initialRound = localStorage.getItem("interviewRound") || (jobCategory === "Technical" ? "TR" : "HR");
   const [round, setRound] = useState(initialRound);
 
@@ -41,7 +39,7 @@ export default function InterviewPage() {
       setLoading(true);
       // send both keys to be safe: backend accepts jobTitle or jobtitle
       const payloadJobTitle = jobTitleStored;
-      const data = await fetchInterviewQuestions(payloadJobTitle, jobDescriptionStored, r, token);
+      const data = await fetchInterviewQuestions(payloadJobTitle, jobDescriptionStored, r);
       setQuestions(data.questions || []);
       setCurrentIndex(0);
       setAnswers([]); // fresh answers each round
@@ -49,6 +47,11 @@ export default function InterviewPage() {
       setLoading(false);
     } catch (err) {
       console.error("loadQuestions error:", err?.response?.data || err.message);
+      if (err.response?.status === 401) {
+        alert("Session expired or not authenticated. Please login again.");
+        navigate("/auth");
+        return;
+      }
       alert("Failed to fetch questions: " + (err.response?.data?.message || err.message));
       setLoading(false);
     }
@@ -70,7 +73,7 @@ export default function InterviewPage() {
 
     // Last question of round -> evaluate this round
     try {
-      const evalRes = await evaluateAnswers(updated, jobTitleStored, round, token);
+      const evalRes = await evaluateAnswers(updated, jobTitleStored, round);
       // evalRes should be { evaluation: [ {score, feedback}, ... ] }
       const thisEvaluation = evalRes.evaluation || [];
 
@@ -83,14 +86,13 @@ export default function InterviewPage() {
       } else {
         // HR finished — submit both TR & HR to backend and show final result
         const payload = {
-          userId,
           jobTitle: jobTitleStored,
           category: jobCategory,
           trEvaluation: trEvaluation || [],
           hrEvaluation: thisEvaluation
         };
 
-        await submitFinalResult(payload, token);
+        await submitFinalResult(payload);
         localStorage.removeItem("interviewRound");
         // navigate to final result page with evaluation arrays
         navigate("/final-result", { state: { jobTitle: jobTitleStored, jobCategory, trEvaluation: trEvaluation || [], hrEvaluation: thisEvaluation } });

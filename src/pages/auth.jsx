@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "../API/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/useAuth";
@@ -10,38 +10,13 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showForgot, setShowForgot] = useState(false);
-  const [forgotEmail, setForgotEmail] = useState("");
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const { login } = useAuth();
-
-  // Handle Google OAuth callback
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    const success = params.get("success");
-
-    if (token && success === "true") {
-      // For Google OAuth, we need to verify the token to get user data
-      const verifyAndLogin = async () => {
-        try {
-          const response = await axios.get('/auth/verify');
-          if (response.data.success) {
-            login(response.data.user);
-            alert("Login successful!");
-            navigate("/home");
-          }
-        } catch (error) {
-          console.error('Failed to verify token:', error);
-          alert("Login failed. Please try again.");
-        }
-      };
-      verifyAndLogin();
-    }
-  }, [navigate, login]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
 
     try {
@@ -66,47 +41,21 @@ export default function AuthPage() {
       // READ DATA
       console.log("RESPONSE →", response.data);
 
-      // If backend returned user data directly, use it (works when cookie-based auth is used)
-      if (response.data && typeof response.data === 'object' && (response.data.user || response.data._id || response.data.username)) {
-        const userData = response.data.user || response.data;
-        login(userData);
-        navigate("/homepage");
-        setLoading(false);
-        return;
+      // SAVE TOKEN IF EXISTS
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
       }
 
-      // Fallback: try verifying via cookie-based endpoint
-      try {
-        const verifyRes = await axios.get('/auth/verify');
-        if (verifyRes.data && verifyRes.data.success) {
-          login(verifyRes.data.user);
-          navigate("/homepage");
-        } else {
-          alert("Login failed: Could not verify user");
-        }
-      } catch (err) {
-        console.error("Verification error:", err);
-        alert("Login failed: " + (err.response?.data?.message || "Verification failed"));
+      const userData = response.data.user || response.data;
+      if (userData) {
+        login(userData);
       }
+
+      navigate("/homepage");
     } catch (err) {
       console.error("ERR →", err);
-      alert(err.response?.data?.message || "Something went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleForgotSubmit = async (e) => {
-    e && e.preventDefault();
-    if (!forgotEmail) return alert("Please enter your email");
-    try {
-      setLoading(true);
-      const res = await axios.post("/users/forgot-password", { email: forgotEmail });
-      alert(res.data.message || "If the email exists, a reset link was sent.");
-      setShowForgot(false);
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Unable to send reset email (backend may not support this yet).");
+      const message = err.response?.data?.message || err.message || "Something went wrong!";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -118,9 +67,9 @@ export default function AuthPage() {
         <h2>{isLogin ? "Login" : "Register"}</h2>
 
         <form onSubmit={handleSubmit} className="auth-form">
+          {error && <div className="error-message" role="alert" style={{marginBottom:'10px', color:'#ff8fa5'}}>{error}</div>}
           {!isLogin && (
             <input
-              type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -149,27 +98,6 @@ export default function AuthPage() {
             {loading ? "Please wait..." : isLogin ? "Login" : "Register"}
           </button>
         </form>
-
-        <div style={{ marginTop: 12, display: 'flex', gap: 8, justifyContent: 'center' }}>
-          <button className="link-btn" onClick={() => setShowForgot(true)} style={{ padding: '8px 12px' }}>
-            Forgot Password?
-          </button>
-        </div>
-
-        {showForgot && (
-          <div className="forgot-modal">
-            <div className="forgot-card">
-              <h3>Reset Password</h3>
-              <form onSubmit={handleForgotSubmit}>
-                <input type="email" placeholder="Enter your email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} required />
-                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                  <button type="submit" disabled={loading}>Send Reset</button>
-                  <button type="button" onClick={() => setShowForgot(false)}>Cancel</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
         <p className="toggle-text">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}

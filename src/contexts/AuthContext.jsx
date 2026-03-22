@@ -11,17 +11,27 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Always try to verify token via API (cookie will be sent automatically)
         const response = await api.get('/auth/verify');
         if (response.data.success) {
           setUser(response.data.user);
-        } else {
-          // Token invalid or not present
-          setUser(null);
+          return;
         }
+
+        // fallback: try localStorage token header explicitly if backend cookie auth isn't available on mobile
+        const localToken = localStorage.getItem('token');
+        if (localToken) {
+          const fallback = await api.get('/auth/verify', {
+            headers: { Authorization: `Bearer ${localToken}` }
+          });
+          if (fallback.data.success) {
+            setUser(fallback.data.user);
+            return;
+          }
+        }
+
+        setUser(null);
       } catch (error) {
-        console.error('Token verification failed:', error);
-        // Token invalid or not present
+        console.error('Token verification failed:', error?.response?.data || error.message || error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -33,7 +43,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     setUser(userData);
-    // Token is stored in httpOnly cookie by backend, no need to store in localStorage
+    // User token may come as response.token and be saved by auth page
+    const responseToken = userData?.token || localStorage.getItem('token');
+    if (responseToken) {
+      localStorage.setItem('token', responseToken);
+    }
   };
 
   const logout = async () => {
@@ -44,6 +58,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout error:', error);
     } finally {
       setUser(null);
+      localStorage.removeItem('token');
     }
   };
 

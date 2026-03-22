@@ -4,45 +4,6 @@
     box-sizing: border-box;
 }
 
-/* Google and forgot password styles */
-.google-btn {
-        background: linear-gradient(135deg, #4285F4, #34A853);
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 600;
-}
-
-.link-btn {
-        background: transparent;
-        color: #fff;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 10px;
-        cursor: pointer;
-}
-
-.forgot-modal {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.6);
-    z-index: 2000;
-}
-
-.forgot-card {
-    background: rgba(255,255,255,0.04);
-    padding: 1.2rem;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-}
-
-.forgot-card input { width: 100%; }
-
 html, body {
     height: 100%;
     width: 100%;
@@ -62,6 +23,7 @@ html, body {
     animation: fadeInBackground 1s ease forwards;
     margin-top: 0;
     padding: 1rem;
+    padding-top: calc(70px + 1rem);
 }
 
 /* Card styling */
@@ -167,6 +129,7 @@ html, body {
 @media (max-width: 768px) {
     .auth-container {
         padding: 1rem;
+        padding-top: calc(70px + 1rem);
     }
 
     .auth-card {
@@ -205,6 +168,7 @@ html, body {
 @media (max-width: 480px) {
     .auth-container {
         padding: 0.75rem;
+        padding-top: calc(70px + 0.75rem);
     }
 
     .auth-card {

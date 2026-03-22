@@ -15,8 +15,17 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  // ✅ Remove localStorage token for cookie auth
+  const localToken = localStorage.getItem("token");
+  if (localToken) {
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${localToken}`,
+    };
+  }
+
+  // diagnostic logs
   console.log("📤 Request:", config.method?.toUpperCase(), config.baseURL + config.url);
+  if (localToken) console.log("📤 Authorization: Bearer token added from localStorage");
   return config;
 });
 
